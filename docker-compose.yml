@@ -1,0 +1,33 @@
+services:
+  eureka:
+    build:
+      context: ./Eureka
+    ports:
+      - "8761:8761"
+
+  gateway:
+    build:
+      context: ./Getaway
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka
+
+  tasks:
+    build:
+      context: ./tasks
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+      - gateway
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
